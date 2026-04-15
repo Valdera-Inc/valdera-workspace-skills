@@ -169,6 +169,43 @@ curl -s -H "Authorization: Bearer $TOKEN" \
 
 ---
 
+## For more complex tasks, use the Google Python SDKs
+
+The curl examples above work well for simple reads and writes. For more sophisticated work — batch updates, formatting, complex queries, pagination, error handling — write a Python script using the official Google client libraries instead.
+
+Install the SDK:
+
+```bash
+pip3 install google-api-python-client google-auth
+```
+
+Use the token from `token.py` to build an authenticated client:
+
+```python
+from google.oauth2.credentials import Credentials
+from googleapiclient.discovery import build
+import subprocess
+
+token = subprocess.check_output(["python3", "skills/google-auth/scripts/token.py"]).decode().strip()
+creds = Credentials(token=token)
+
+# Sheets
+sheets = build("sheets", "v4", credentials=creds)
+
+# Drive
+drive = build("drive", "v3", credentials=creds)
+
+# Docs
+docs = build("docs", "v1", credentials=creds)
+
+# Gmail
+gmail = build("gmail", "v1", credentials=creds)
+```
+
+This is the preferred approach for anything beyond simple CRUD — batch operations, complex formatting, multi-step workflows, etc.
+
+---
+
 ## Troubleshooting
 
 If the token command fails with a refresh error, the saved tokens may be stale. Delete them and re-authenticate:
