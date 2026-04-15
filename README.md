@@ -1,66 +1,57 @@
-# Google Auth Plugin for Claude Code
+# Valdera Workspace Skills
 
-A Claude Code plugin that gives agents access to Google APIs (Sheets, Drive, Docs, Gmail) via OAuth. Handles credential setup, browser-based authentication, token caching, and automatic refresh — all with zero external dependencies.
+Scripts and skills that let Claude Code agents work with Google Sheets, Drive, and Docs.
 
-## Install
+## Setup
 
-```
-/plugin marketplace add valdera/oauth-store
-/plugin install google-auth@valdera-tools
-```
+### 1. Clone the repo
 
-Or add to any project's `.claude/settings.json` to auto-prompt teammates:
-
-```json
-{
-  "extraKnownMarketplaces": {
-    "valdera-tools": {
-      "source": { "source": "github", "repo": "valdera/oauth-store" }
-    }
-  },
-  "enabledPlugins": {
-    "google-auth@valdera-tools": true
-  }
-}
+```bash
+git clone https://github.com/valdera/valdera-workspace-skills.git
+cd valdera-workspace-skills
 ```
 
-## How it works
+### 2. Install Python dependencies
 
-Once installed, the agent can call `/google-auth` or use the skill automatically whenever a task involves Google APIs. Under the hood it runs `token.py`, which:
+This project uses [uv](https://docs.astral.sh/uv/). If you don't have it:
 
-1. **First run** — prompts the user to paste OAuth client credentials (from a shared internal doc) and sign in via the browser. Tokens are saved to `~/.oauth-store/`.
-2. **Subsequent runs** — returns a cached access token instantly, refreshing it automatically if expired.
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
 
-The token is printed to stdout; the agent uses it as a `Bearer` token in Google API calls.
+Then install dependencies:
 
-## Scopes
+```bash
+uv sync
+```
 
-The token grants access to:
+### 3. Set up your `.env` file
 
-- **Google Sheets** — read/write
-- **Google Drive** — read/write
-- **Google Docs** — read/write
-- **Gmail** — read-only
+Copy the example and fill in your Google OAuth credentials:
 
-## Requirements
+```bash
+cp .env.example .env
+```
 
-- macOS with `python3` (ships with Xcode Command Line Tools)
-- Claude Code CLI
-- Access to the shared OAuth credentials doc (Valdera internal)
-
-## Repo structure
+Open `.env` in a text editor and paste your Client ID and Client Secret:
 
 ```
-oauth-store/
-├── .claude-plugin/
-│   └── marketplace.json              # marketplace catalog
-└── plugins/
-    └── google-auth/
-        ├── .claude-plugin/
-        │   └── plugin.json           # plugin manifest
-        └── skills/
-            └── google-auth/
-                ├── SKILL.md           # agent instructions + API examples
-                └── scripts/
-                    └── token.py       # OAuth script (stdlib only)
+GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=your-client-secret
 ```
+
+Ask your team lead for these values, or get them from your Google Cloud Console under **APIs & Credentials > OAuth 2.0 Client IDs**.
+
+### 4. Sign in with Google
+
+The first time you run any script, it will open your browser to sign in with Google. After that, tokens are cached and refresh automatically.
+
+## Using with Claude Code
+
+Open this folder in Claude Code and the skills are available automatically. Just ask Claude to do things like:
+
+- "Read the data from this spreadsheet: https://docs.google.com/spreadsheets/d/..."
+- "Find the quarterly report on my Drive"
+- "What does this doc say? https://docs.google.com/document/d/..."
+
+Claude will pick the right script and handle authentication. The first time, it will ask you to sign in via your browser.

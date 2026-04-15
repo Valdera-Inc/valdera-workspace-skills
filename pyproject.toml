@@ -1,0 +1,11 @@
+[project]
+name = "valdera-workspace-skills"
+version = "0.1.0"
+description = "Claude Code skills for Google Sheets, Drive, and Docs"
+requires-python = ">=3.14"
+dependencies = [
+    "google-api-python-client>=2.194.0",
+    "google-auth>=2.49.2",
+    "google-auth-httplib2>=0.3.1",
+    "google-auth-oauthlib>=1.3.1",
+]

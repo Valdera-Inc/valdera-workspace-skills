@@ -1,7 +1,9 @@
 # Python
 __pycache__/
 *.pyc
+.venv/
 
 # Never commit credentials or tokens
+.env
 credentials.json
 tokens.json

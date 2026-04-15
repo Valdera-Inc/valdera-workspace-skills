@@ -5,8 +5,11 @@ oauth-store: Google OAuth token manager.
 Usage: python3 token.py
 
 Prints a valid Google OAuth access token to stdout.
-On first run, guides the user through credential setup and authentication.
+On first run, opens the browser for Google sign-in.
 All prompts and status messages go to stderr so stdout is always just the token.
+
+Requires GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in a .env file
+at the project root (next to pyproject.toml).
 """
 
 import base64
@@ -21,9 +24,11 @@ import urllib.parse
 import urllib.request
 import webbrowser
 
-CONFIG_DIR = os.path.expanduser("~/.oauth-store")
-CREDENTIALS_FILE = os.path.join(CONFIG_DIR, "credentials.json")
-TOKENS_FILE = os.path.join(CONFIG_DIR, "tokens.json")
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
+ENV_FILE = os.path.join(PROJECT_ROOT, ".env")
+
+TOKENS_FILE = os.path.join(os.path.expanduser("~/.oauth-store"), "tokens.json")
 
 SCOPES = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -37,53 +42,43 @@ REDIRECT_URI = f"http://localhost:{REDIRECT_PORT}"
 AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth"
 TOKEN_URL = "https://oauth2.googleapis.com/token"
 
-# URL to the shared Google Drive file containing OAuth client credentials
-CREDENTIALS_DOC_URL = "https://docs.google.com/document/d/1oUstS0eEquIEcIUo41fu9Lxj9T3DzT-9qi9N2Q-Rmnc/edit?usp=sharing"
-
 
 def _info(msg):
     """Print informational message to stderr."""
     print(msg, file=sys.stderr, flush=True)
 
 
-def _prompt(msg):
-    """Print prompt to stderr and read from stdin."""
-    print(msg, file=sys.stderr, end="", flush=True)
-    return input()
+def _load_env():
+    """Parse the .env file and return a dict of key=value pairs."""
+    env = {}
+    if not os.path.exists(ENV_FILE):
+        return env
+    with open(ENV_FILE) as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            key, _, value = line.partition("=")
+            env[key.strip()] = value.strip()
+    return env
 
 
 # ---------------------------------------------------------------------------
-# Credentials (client ID / secret)
+# Credentials (client ID / secret from .env)
 # ---------------------------------------------------------------------------
 
 def load_credentials():
-    """Load client credentials, prompting the user to set them up if missing."""
-    if os.path.exists(CREDENTIALS_FILE):
-        with open(CREDENTIALS_FILE) as f:
-            creds = json.load(f)
-        if creds.get("client_id") and creds.get("client_secret"):
-            return creds
-
-    os.makedirs(CONFIG_DIR, exist_ok=True)
-
-    _info("\n--- OAuth Credentials Setup ---")
-    _info(f"\nOpen this file to get your OAuth credentials:\n")
-    _info(f"  {CREDENTIALS_DOC_URL}\n")
-
-    client_id = _prompt("Paste Client ID: ").strip()
-    client_secret = _prompt("Paste Client Secret: ").strip()
+    """Load client credentials from the .env file."""
+    env = _load_env()
+    client_id = env.get("GOOGLE_CLIENT_ID", "")
+    client_secret = env.get("GOOGLE_CLIENT_SECRET", "")
 
     if not client_id or not client_secret:
-        _info("Error: Both Client ID and Client Secret are required.")
+        _info("Error: GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET must be set in .env")
+        _info(f"Expected .env location: {ENV_FILE}")
         sys.exit(1)
 
-    creds = {"client_id": client_id, "client_secret": client_secret}
-    with open(CREDENTIALS_FILE, "w") as f:
-        json.dump(creds, f, indent=2)
-    os.chmod(CREDENTIALS_FILE, 0o600)
-
-    _info(f"Credentials saved to {CREDENTIALS_FILE}\n")
-    return creds
+    return {"client_id": client_id, "client_secret": client_secret}
 
 
 # ---------------------------------------------------------------------------
@@ -99,7 +94,7 @@ def load_tokens():
 
 
 def save_tokens(tokens):
-    os.makedirs(CONFIG_DIR, exist_ok=True)
+    os.makedirs(os.path.dirname(TOKENS_FILE), exist_ok=True)
     with open(TOKENS_FILE, "w") as f:
         json.dump(tokens, f, indent=2)
     os.chmod(TOKENS_FILE, 0o600)

@@ -5,30 +5,36 @@ description: Get OAuth access tokens for Google APIs — Sheets, Drive, Docs, Gm
 
 # Google Auth
 
-Provides a valid Google OAuth access token. The bundled script handles credential setup, browser-based authentication, token caching, and automatic refresh. The token grants access to Sheets, Drive, Docs, and Gmail (read-only).
+Provides a valid Google OAuth access token. The script handles browser-based authentication, token caching, and automatic refresh. The token grants access to Sheets, Drive, Docs, and Gmail (read-only).
+
+## Prerequisites
+
+The project requires a `.env` file in the repo root with Google OAuth client credentials:
+
+```
+GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=your-client-secret
+```
+
+If `.env` is missing or incomplete, the script will exit with an error telling the user to set it up.
 
 ## Getting a token
 
 ```bash
-TOKEN=$(python3 skills/google-auth/scripts/token.py)
+TOKEN=$(python3 scripts/get_token.py)
 ```
 
-The `token.py` script is bundled with this plugin at `skills/google-auth/scripts/token.py`.
+The `get_token.py` script lives at `scripts/get_token.py` in the repo root.
 
 The token is printed to stdout. All prompts and status messages go to stderr, so `$TOKEN` will always be just the access token string.
 
 ### First run
 
-On first run, the script requires user interaction:
+On first run, the script opens the user's browser for Google sign-in. After sign-in, tokens are saved to `~/.oauth-store/`.
 
-1. It prints a link to a shared Google Drive file containing the OAuth client credentials
-2. The user pastes the Client ID and Client Secret
-3. It opens the user's browser for Google sign-in
-4. After sign-in, tokens are saved to `~/.oauth-store/`
+**Before running `get_token.py` for the first time**, tell the user something like:
 
-**Before running `token.py` for the first time**, tell the user something like:
-
-> I need to set up Google API access. This is a one-time setup — you'll need to paste some credentials and sign in with Google in your browser. Ready?
+> I need to authenticate with Google. This will open your browser for sign-in. Ready?
 
 Wait for the user to confirm before proceeding.
 
@@ -41,7 +47,7 @@ The script returns immediately with a cached token. If the token is expired, it 
 Fetch a fresh token before each API call (the script handles caching internally):
 
 ```bash
-TOKEN=$(python3 skills/google-auth/scripts/token.py)
+TOKEN=$(python3 scripts/get_token.py)
 ```
 
 ---
@@ -173,20 +179,14 @@ curl -s -H "Authorization: Bearer $TOKEN" \
 
 The curl examples above work well for simple reads and writes. For more sophisticated work — batch updates, formatting, complex queries, pagination, error handling — write a Python script using the official Google client libraries instead.
 
-Install the SDK:
-
-```bash
-pip3 install google-api-python-client google-auth
-```
-
-Use the token from `token.py` to build an authenticated client:
+The Google SDK dependencies are already included in this project's `pyproject.toml`. Use the token from `get_token.py` to build an authenticated client:
 
 ```python
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 import subprocess
 
-token = subprocess.check_output(["python3", "skills/google-auth/scripts/token.py"]).decode().strip()
+token = subprocess.check_output(["python3", "scripts/get_token.py"]).decode().strip()
 creds = Credentials(token=token)
 
 # Sheets
@@ -212,7 +212,7 @@ If the token command fails with a refresh error, the saved tokens may be stale. 
 
 ```bash
 rm ~/.oauth-store/tokens.json
-TOKEN=$(python3 skills/google-auth/scripts/token.py)
+TOKEN=$(python3 scripts/get_token.py)
 ```
 
 This will re-trigger the browser sign-in flow (requires user interaction).
