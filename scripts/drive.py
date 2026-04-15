@@ -2,11 +2,11 @@
 """Google Drive CLI. Outputs JSON to stdout.
 
 Usage:
-  python3 scripts/drive.py list  [QUERY]
-  python3 scripts/drive.py search NAME
-  python3 scripts/drive.py download FILE_ID [OUTPUT_PATH]
-  python3 scripts/drive.py export FILE_ID MIME_TYPE [OUTPUT_PATH]
-  python3 scripts/drive.py upload LOCAL_PATH [PARENT_FOLDER_ID]
+  uv run scripts/drive.py list  [QUERY]
+  uv run scripts/drive.py search NAME
+  uv run scripts/drive.py download FILE_ID [OUTPUT_PATH]
+  uv run scripts/drive.py export FILE_ID MIME_TYPE [OUTPUT_PATH]
+  uv run scripts/drive.py upload LOCAL_PATH [PARENT_FOLDER_ID]
 """
 
 import io

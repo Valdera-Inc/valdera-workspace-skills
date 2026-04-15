@@ -2,10 +2,10 @@
 """Google Sheets CLI. Outputs JSON to stdout.
 
 Usage:
-  python3 scripts/sheets.py read  SPREADSHEET_ID RANGE
-  python3 scripts/sheets.py write SPREADSHEET_ID RANGE '[["a","b"],["c","d"]]'
-  python3 scripts/sheets.py append SPREADSHEET_ID RANGE '[["a","b"]]'
-  python3 scripts/sheets.py info  SPREADSHEET_ID
+  uv run scripts/sheets.py read  SPREADSHEET_ID RANGE
+  uv run scripts/sheets.py write SPREADSHEET_ID RANGE '[["a","b"],["c","d"]]'
+  uv run scripts/sheets.py append SPREADSHEET_ID RANGE '[["a","b"]]'
+  uv run scripts/sheets.py info  SPREADSHEET_ID
 """
 
 import json

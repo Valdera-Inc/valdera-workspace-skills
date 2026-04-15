@@ -12,7 +12,7 @@ CLI at `scripts/sheets.py`. Requires auth via `scripts/get_token.py` (handled au
 ### Read cells
 
 ```bash
-python3 scripts/sheets.py read SPREADSHEET_ID 'Sheet1!A1:D10'
+uv run scripts/sheets.py read SPREADSHEET_ID 'Sheet1!A1:D10'
 ```
 
 Returns JSON array of rows: `[["a","b"],["c","d"]]`
@@ -22,7 +22,7 @@ Use just `Sheet1` for all data. The spreadsheet ID is the long string in the URL
 ### Write cells
 
 ```bash
-python3 scripts/sheets.py write SPREADSHEET_ID 'Sheet1!A1' '[["a","b"],["c","d"]]'
+uv run scripts/sheets.py write SPREADSHEET_ID 'Sheet1!A1' '[["a","b"],["c","d"]]'
 ```
 
 Third argument is a JSON array of rows.
@@ -30,7 +30,7 @@ Third argument is a JSON array of rows.
 ### Append rows
 
 ```bash
-python3 scripts/sheets.py append SPREADSHEET_ID 'Sheet1' '[["new","row"]]'
+uv run scripts/sheets.py append SPREADSHEET_ID 'Sheet1' '[["new","row"]]'
 ```
 
 Appends after the last row with data.
@@ -38,7 +38,7 @@ Appends after the last row with data.
 ### Spreadsheet info
 
 ```bash
-python3 scripts/sheets.py info SPREADSHEET_ID
+uv run scripts/sheets.py info SPREADSHEET_ID
 ```
 
 Returns title and sheet names/properties.

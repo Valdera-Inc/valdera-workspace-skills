@@ -12,7 +12,7 @@ CLI at `scripts/docs.py`. Requires auth via `scripts/get_token.py` (handled auto
 ### Read as plain text
 
 ```bash
-python3 scripts/docs.py read DOCUMENT_ID
+uv run scripts/docs.py read DOCUMENT_ID
 ```
 
 Extracts and prints the document's text content. The document ID is in the URL: `docs.google.com/document/d/DOCUMENT_ID/edit`
@@ -20,7 +20,7 @@ Extracts and prints the document's text content. The document ID is in the URL: 
 ### Read as raw JSON
 
 ```bash
-python3 scripts/docs.py json DOCUMENT_ID
+uv run scripts/docs.py json DOCUMENT_ID
 ```
 
 Returns the full Docs API response with structural elements (paragraphs, formatting, etc).

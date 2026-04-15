@@ -2,8 +2,8 @@
 """Google Docs CLI. Outputs plain text or JSON to stdout.
 
 Usage:
-  python3 scripts/docs.py read DOCUMENT_ID
-  python3 scripts/docs.py json DOCUMENT_ID
+  uv run scripts/docs.py read DOCUMENT_ID
+  uv run scripts/docs.py json DOCUMENT_ID
 """
 
 import json

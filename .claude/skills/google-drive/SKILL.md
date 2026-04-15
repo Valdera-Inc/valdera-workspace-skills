@@ -12,8 +12,8 @@ CLI at `scripts/drive.py`. Requires auth via `scripts/get_token.py` (handled aut
 ### List files
 
 ```bash
-python3 scripts/drive.py list
-python3 scripts/drive.py list "mimeType='application/vnd.google-apps.spreadsheet'"
+uv run scripts/drive.py list
+uv run scripts/drive.py list "mimeType='application/vnd.google-apps.spreadsheet'"
 ```
 
 The optional argument is a Drive API query string. Returns JSON array of `{id, name, mimeType, modifiedTime}`.
@@ -21,14 +21,14 @@ The optional argument is a Drive API query string. Returns JSON array of `{id, n
 ### Search by name
 
 ```bash
-python3 scripts/drive.py search 'quarterly report'
+uv run scripts/drive.py search 'quarterly report'
 ```
 
 ### Download a file
 
 ```bash
-python3 scripts/drive.py download FILE_ID
-python3 scripts/drive.py download FILE_ID output.pdf
+uv run scripts/drive.py download FILE_ID
+uv run scripts/drive.py download FILE_ID output.pdf
 ```
 
 For binary files (PDFs, images, etc). Defaults to the file's original name.
@@ -36,8 +36,8 @@ For binary files (PDFs, images, etc). Defaults to the file's original name.
 ### Export Google-native files
 
 ```bash
-python3 scripts/drive.py export DOCUMENT_ID text/plain
-python3 scripts/drive.py export SPREADSHEET_ID text/csv output.csv
+uv run scripts/drive.py export DOCUMENT_ID text/plain
+uv run scripts/drive.py export SPREADSHEET_ID text/csv output.csv
 ```
 
 Use for Docs, Sheets, Slides. Common MIME types: `text/plain`, `text/csv`, `application/pdf`.
@@ -45,8 +45,8 @@ Use for Docs, Sheets, Slides. Common MIME types: `text/plain`, `text/csv`, `appl
 ### Upload a file
 
 ```bash
-python3 scripts/drive.py upload report.csv
-python3 scripts/drive.py upload report.csv PARENT_FOLDER_ID
+uv run scripts/drive.py upload report.csv
+uv run scripts/drive.py upload report.csv PARENT_FOLDER_ID
 ```
 
 ## First run
