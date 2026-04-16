@@ -7,3 +7,4 @@ __pycache__/
 .env
 credentials.json
 tokens.json
+MEMORY.md

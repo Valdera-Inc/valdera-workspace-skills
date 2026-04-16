@@ -51,6 +51,10 @@ def main():
         print(__doc__, file=sys.stderr)
         sys.exit(1)
 
+    if sys.argv[1] in ("-h", "--help", "help"):
+        print(__doc__)
+        sys.exit(0)
+
     cmd = sys.argv[1]
     args = sys.argv[2:]
 

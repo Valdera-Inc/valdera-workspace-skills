@@ -35,6 +35,7 @@ SCOPES = [
     "https://www.googleapis.com/auth/drive",
     "https://www.googleapis.com/auth/documents",
     "https://www.googleapis.com/auth/gmail.readonly",
+    "https://www.googleapis.com/auth/bigquery",
 ]
 REDIRECT_PORT = 8085
 REDIRECT_URI = f"http://localhost:{REDIRECT_PORT}"

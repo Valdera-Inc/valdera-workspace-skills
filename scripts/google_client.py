@@ -36,3 +36,7 @@ def drive_service():
 
 def docs_service():
     return build("docs", "v1", credentials=get_credentials())
+
+
+def bigquery_service():
+    return build("bigquery", "v2", credentials=get_credentials())
