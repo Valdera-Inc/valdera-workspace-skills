@@ -1,6 +1,6 @@
 # Valdera Workspace Skills
 
-Google Workspace tools for Claude Code — Sheets, Drive, and Docs.
+The purpose of this repo is to provide tools and scripts for data exploration.
 
 ## Authentication
 
@@ -16,18 +16,30 @@ If auth fails with a refresh error, delete `~/.oauth-store/tokens.json` and re-r
 
 Always use `uv run` to run scripts. Never use bare `python3` — it won't have the dependencies.
 
-## Available skills
+## Available scripts
 
 - **google-sheets** — `scripts/sheets.py`: read, write, append, info
 - **google-drive** — `scripts/drive.py`: list, search, download, export, upload
 - **google-docs** — `scripts/docs.py`: read (plain text), json (raw API)
+- **bigquery** — `scripts/bigquery.py`: query, list-datasets, list-tables, info
 
-## Writing custom scripts
+## Advanced analysis with custom scripts
 
-Use `scripts/google_client.py` for authenticated service clients:
+For more complex analysis, create a new folder under $PROJECT_ROOT/analysis/. Name the folder something easy to recognize based on the general content of the session so far. Or ask the user for a session name if it's not clear. 
 
-```python
-from scripts.google_client import sheets_service, drive_service, docs_service
-```
+Prefer to write a python script in the analysis folder over executing scripts directly with the "-c" flag. Import functions from existing scripts where reasonable to do so. Importing from google_client.py should almost always be preferrerd, since it manages the auth as well.
 
-Google SDK dependencies are already in `pyproject.toml`.
+## Project memory (MEMORY.md)
+
+Maintain a `MEMORY.md` file at the project root for facts learned across sessions. **Read it at the start of every session** and **update it when you learn something worth persisting**.
+
+What to store:
+- Identifiers the user provides in response to a question — GCP project IDs, dataset IDs, spreadsheet IDs, doc IDs, etc. Record what the ID is for so you can reuse it next time instead of asking again.
+- Conventions or preferences the user states explicitly (e.g. "always use dataset X for Y analysis").
+- Non-obvious facts about data sources — schema quirks, which tables are stale, which project owns which dataset.
+
+What NOT to store:
+- Anything already in CLAUDE.md, the code, or `.env`.
+- Ephemeral task state or conversation context.
+
+Format: plain markdown with short bullets under topical headings (e.g. `## BigQuery`, `## Sheets`). Update in place rather than appending chronologically. If a stored fact turns out to be wrong, correct or remove it.

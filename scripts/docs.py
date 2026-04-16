@@ -37,6 +37,10 @@ def read_json(document_id):
 
 
 def main():
+    if len(sys.argv) >= 2 and sys.argv[1] in ("-h", "--help", "help"):
+        print(__doc__)
+        sys.exit(0)
+
     if len(sys.argv) < 3:
         print(__doc__, file=sys.stderr)
         sys.exit(1)
