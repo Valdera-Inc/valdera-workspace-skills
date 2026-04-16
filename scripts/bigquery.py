@@ -5,10 +5,10 @@ Usage:
   uv run scripts/bigquery.py query         SQL
   uv run scripts/bigquery.py list-datasets PROJECT_ID
   uv run scripts/bigquery.py list-tables   PROJECT_ID DATASET_ID
-  uv run scripts/bigquery.py info          PROJECT_ID DATASET_ID TABLE_ID
+  uv run scripts/bigquery.py table-info    PROJECT_ID DATASET_ID TABLE_ID
 
 Billing project is read from PROJECT_ID in .env (used by `query`). The
-PROJECT_ID argument to list-datasets/list-tables/info is the project that
+PROJECT_ID argument to list-datasets/list-tables/table-info is the project that
 *owns* the datasets being inspected.
 """
 
@@ -44,10 +44,10 @@ def _coerce(value, field_type):
 def _rows_to_dicts(schema_fields, rows):
     out = []
     for row in rows:
-        cells = row.get("f", [])
+        cells = row["f"]
         out.append(
             {
-                field["name"]: _coerce(cell.get("v"), field["type"])
+                field["name"]: _coerce(cell["v"], field["type"])
                 for field, cell in zip(schema_fields, cells)
             }
         )
@@ -65,22 +65,22 @@ def query(sql):
         .execute()
     )
 
-    schema_fields = result.get("schema", {}).get("fields", [])
-    rows = _rows_to_dicts(schema_fields, result.get("rows", []))
+    schema_fields = result["schema"]["fields"]
+    rows = _rows_to_dicts(schema_fields, result["rows"])
     print(
         json.dumps(
             {
-                "totalRows": int(result.get("totalRows", 0)),
+                "totalRows": int(result["totalRows"]),
                 "rows": rows,
             },
-            indent=2,
+            indent="\t",
         )
     )
 
 
 def list_datasets(project_id):
     result = bigquery_service().datasets().list(projectId=project_id).execute()
-    print(json.dumps(result.get("datasets", []), indent=2))
+    print(json.dumps(result["datasets"], indent="\t"))
 
 
 def list_tables(project_id, dataset_id):
@@ -93,10 +93,10 @@ def list_tables(project_id, dataset_id):
         )
         .execute()
     )
-    print(json.dumps(result.get("tables", []), indent=2))
+    print(json.dumps(result["tables"], indent="\t"))
 
 
-def info(project_id, dataset_id, table_id):
+def table_info(project_id, dataset_id, table_id):
     result = (
         bigquery_service()
         .tables()
@@ -107,7 +107,7 @@ def info(project_id, dataset_id, table_id):
         )
         .execute()
     )
-    print(json.dumps(result, indent=2))
+    print(json.dumps(result, indent="\t"))
 
 
 def main():
@@ -128,8 +128,8 @@ def main():
         list_datasets(args[0])
     elif cmd == "list-tables" and len(args) == 2:
         list_tables(args[0], args[1])
-    elif cmd == "info" and len(args) == 3:
-        info(args[0], args[1], args[2])
+    elif cmd == "table-info" and len(args) == 3:
+        table_info(args[0], args[1], args[2])
     else:
         print(__doc__, file=sys.stderr)
         sys.exit(1)

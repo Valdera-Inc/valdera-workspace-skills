@@ -21,7 +21,7 @@ Always use `uv run` to run scripts. Never use bare `python3` — it won't have t
 - **google-sheets** — `scripts/sheets.py`: read, write, append, info
 - **google-drive** — `scripts/drive.py`: list, search, download, export, upload
 - **google-docs** — `scripts/docs.py`: read (plain text), json (raw API)
-- **bigquery** — `scripts/bigquery.py`: query, list-datasets, list-tables, info
+- **bigquery** — `scripts/bigquery.py`: query, list-datasets, list-tables, table-info
 
 ## Advanced analysis with custom scripts
 
