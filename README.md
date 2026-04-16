@@ -7,7 +7,7 @@ Scripts and skills that let Claude Code agents work with Google Sheets, Drive, a
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/valdera/valdera-workspace-skills.git
+git clone https://github.com/Valdera-Inc/valdera-workspace-skills.git
 cd valdera-workspace-skills
 ```
 
