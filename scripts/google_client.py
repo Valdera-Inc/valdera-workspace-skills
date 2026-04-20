@@ -40,3 +40,7 @@ def docs_service():
 
 def bigquery_service():
     return build("bigquery", "v2", credentials=get_credentials())
+
+
+def gmail_service():
+    return build("gmail", "v1", credentials=get_credentials())
