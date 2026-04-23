@@ -1,6 +1,6 @@
 # Valdera Workspace Skills
 
-The purpose of this project is to provide tools and scripts for data exploration.
+This project provides tools and scripts for data exploration.
 
 ## Authentication
 All scripts authenticate via `scripts/get_token.py`, which reads `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` from the `.env` file in the project root. Tokens are cached at `~/.oauth-store/tokens.json` and refresh automatically. **First run requires user interaction** — the script opens a browser for Google sign-in. Let the user know.
