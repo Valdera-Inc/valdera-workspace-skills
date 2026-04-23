@@ -7,4 +7,9 @@ __pycache__/
 .env
 credentials.json
 tokens.json
+
+# Let users have their own memory and projects
 MEMORY.md
+projects/**
+!projects/README.md
+
