@@ -1,7 +1,7 @@
 - User projects go under this directory
 - Each project has the following directory structure
 
-<project-name>/
+<project_name>/
     README.md
     scripts/
     artifacts/
