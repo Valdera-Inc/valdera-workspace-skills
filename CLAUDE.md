@@ -45,4 +45,4 @@ projects/
     scripts/
     artifacts/
 
-Liberally create scripts under the project scripts folder rather than relying on one off bash invocations. Any artifacts (spreadsheets, presentations, graphs etc) go under the artifacts directory. Keep updating the project README as you go.
+Liberally create scripts under the project scripts folder rather than relying on ad-hoc shell invocations. Any artifacts (spreadsheets, presentations, graphs, etc.) go under the artifacts directory. Keep updating the project README as you go.
