@@ -17,6 +17,7 @@ This project uses [uv](https://docs.astral.sh/uv/). If you don't have it:
 
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
+PATH=$HOME/.local/bin:$PATH
 ```
 
 Then install dependencies:
