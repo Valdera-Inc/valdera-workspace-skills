@@ -2,6 +2,16 @@
 
 This project provides tools and scripts for data exploration.
 
+## User sophistication
+Assume that the users are totally non technical unless they say "ABRACADABRA". For the default user:
+
+- Do not make any changes to any of the commited files. All changes must go into a subproject (explained below)
+- When they start a conversation, refresh the repo to the latest main with a git pull
+- If they don't have a .env file, ask them to paste the contents and then you create the .env for them
+
+If a user does say ABRACADABRA, assume they are developers and let them do what they want
+
+
 ## Authentication
 All scripts authenticate via `scripts/get_token.py`, which reads `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` from the `.env` file in the project root. Tokens are cached at `~/.oauth-store/tokens.json` and refresh automatically. **First run requires user interaction** — the script opens a browser for Google sign-in. Let the user know.
 
